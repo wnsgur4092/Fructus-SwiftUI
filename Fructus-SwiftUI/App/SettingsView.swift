@@ -11,6 +11,7 @@ struct SettingsView: View {
     //MARK: - PROPERTIES
     
     @Environment(\.presentationMode) var presentationMode
+    @AppStorage("isOnboarding") var isOnboarding : Bool = false
     
     //MARK: - BODY
     var body: some View {
@@ -35,6 +36,35 @@ struct SettingsView: View {
                                 .font(.footnote)
                         } //: HSTACK
                     } //: GROUP
+                    
+                    //MARK: - SECTION 2
+                    GroupBox {
+                        SettingsLabelView(labelText: "Customization", labelImage: "paintbrush")
+                        
+                        Divider().padding(.vertical, 4)
+                        
+                        Text("If you wish, you can restart application by toggle the switch in this box. That way it starts the onboarding process and you will see the welcome screen again.")
+                            .padding(.vertical, 8)
+                            .frame(minHeight : 60)
+                            .layoutPriority(1)
+                            .multilineTextAlignment(.leading)
+                        
+                        Toggle(isOn: $isOnboarding) {
+                            if isOnboarding{
+                                Text("Restarted".uppercased())
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.green)
+                            } else {
+                                Text("Restart".uppercased())
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                                
+                        }
+                        .padding()
+                        .background(.tertiary).clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
                     
                     //MARK: - SECTION 3
                     
@@ -67,6 +97,7 @@ struct SettingsView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
+                        presentationMode.wrappedValue.dismiss()
                         presentationMode.wrappedValue.dismiss()
                     } label: {
                         Image(systemName: "xmark")
